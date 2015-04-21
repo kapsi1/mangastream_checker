@@ -25,20 +25,17 @@ if (seen) seen = JSON.parse(seen);
 else seen = [];
 
 function setAlarm() {
-    console.log('setAlarm', checkPeriod);
     chrome.alarms.create('mangastreamchecker', {when: Date.now() + 100, periodInMinutes: checkPeriod});
 }
 
 chrome.runtime.onInstalled.addListener(function () {
     if (checkPeriod) setAlarm();
 });
-console.log('checkPeriod', checkPeriod);
 if (!checkPeriod) {
     var optionsPageUrl;
     if (isOpera) optionsPageUrl = 'chrome-extension://' + chrome.runtime.id + '/options.html';
     else optionsPageUrl = 'chrome://extensions?options=' + chrome.runtime.id;
-    console.log('optionsPageUrl', optionsPageUrl);
-    newTab(optionsPageUrl);
+    chrome.tabs.create({url: optionsPageUrl});
 }
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
@@ -51,7 +48,7 @@ function showNotification(title, message, url) {
         icon: 'logo.png'
     });
     n.onclick = function () {
-        newTab(url);
+        chrome.tabs.create({url: url});
     };
 }
 
@@ -83,26 +80,4 @@ function getData() {
     xhr.open('GET', url);
     xhr.responseType = "document";
     xhr.send();
-}
-
-function newTab(url) {
-    // trying to create a tab
-    if (chrome.runtime.lastError) {
-        console.log(1, chrome.runtime.lastError.message);
-    }
-    chrome.tabs.create({url: url}, function (tab) {
-        if (chrome.runtime.lastError) {
-            console.log(2, chrome.runtime.lastError.message);
-        }
-        if (!tab) {
-            // probably no window available
-            chrome.windows.create({url: url}, function (win) {
-                // better to focus after window creation callback
-                chrome.windows.update(win.id, {focused: true})
-            })
-        } else {
-            // better to focus after tab creation callback
-            chrome.windows.update(tab.windowId, {focused: true})
-        }
-    })
 }
