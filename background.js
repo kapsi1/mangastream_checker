@@ -1,11 +1,23 @@
 var url = 'http://mangastream.com/rss';
 var isOpera = navigator.vendor === 'Opera Software ASA';
+
+var seen = localStorage.getItem('seen');
+if (seen) seen = JSON.parse(seen);
+else seen = [];
+
 var selectedManga = localStorage.getItem('selectedManga');
 if (selectedManga) selectedManga = JSON.parse(selectedManga);
 else selectedManga = [];
 
 var checkPeriod = localStorage.getItem('checkPeriod');
 if (checkPeriod) checkPeriod = parseInt(checkPeriod, 10);
+//open options page after installation
+if (!checkPeriod) {
+    var optionsPageUrl;
+    if (isOpera) optionsPageUrl = 'chrome-extension://' + chrome.runtime.id + '/options.html';
+    else optionsPageUrl = 'chrome://extensions?options=' + chrome.runtime.id;
+    chrome.tabs.create({url: optionsPageUrl});
+}
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     switch (request.type) {
@@ -19,28 +31,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             break;
     }
 });
-
-var seen = localStorage.getItem('seen');
-if (seen) seen = JSON.parse(seen);
-else seen = [];
+chrome.runtime.onInstalled.addListener(function () {
+    if (checkPeriod) setAlarm();
+});
+chrome.alarms.onAlarm.addListener(function (alarm) {
+    getData();
+});
 
 function setAlarm() {
     chrome.alarms.create('mangastreamchecker', {when: Date.now() + 100, periodInMinutes: checkPeriod});
 }
-
-chrome.runtime.onInstalled.addListener(function () {
-    if (checkPeriod) setAlarm();
-});
-if (!checkPeriod) {
-    var optionsPageUrl;
-    if (isOpera) optionsPageUrl = 'chrome-extension://' + chrome.runtime.id + '/options.html';
-    else optionsPageUrl = 'chrome://extensions?options=' + chrome.runtime.id;
-    chrome.tabs.create({url: optionsPageUrl});
-}
-
-chrome.alarms.onAlarm.addListener(function (alarm) {
-    getData();
-});
 
 function showNotification(title, message, url) {
     var n = new Notification(title, {
