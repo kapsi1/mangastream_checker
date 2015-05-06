@@ -63,8 +63,8 @@ function initCheckPeriodOption() {
     var cpEl = document.querySelector('#check_period');
     cpEl.value = getCheckPeriod();
     cpEl.onchange = function () {
-        chrome.runtime.sendMessage({type: 'checkPeriod', newVal: this.value});
         localStorage.setItem('checkPeriod', this.value);
+        chrome.runtime.sendMessage({type: 'checkPeriod', newVal: this.value});
     };
     cpEl.onchange();
 }

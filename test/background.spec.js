@@ -37,11 +37,6 @@ describe("background module", function () {
             saveToStorage('checkPeriod', 123);
             expect(checkPeriod()).toEqual(123);
         });
-        it("opens options page if checkPeriod isn't set in localStorage", function () {
-            spyOn(window, 'openOptions');
-            checkPeriod();
-            expect(openOptions).toHaveBeenCalled();
-        });
     });
     describe('processRssPage', function () {
         it('processes a rss page', function () {

@@ -25,15 +25,11 @@ function openOptions() {
 }
 
 function checkPeriod() {
-    var checkPeriod = restoreFromStorage('checkPeriod');
-    if (checkPeriod) return checkPeriod;
-
-    //open options page after installation, options will set checkPeriod
-    else openOptions();
+    return restoreFromStorage('checkPeriod');
 }
 
 function setAlarm() {
-    chrome.alarms.create('mangastreamchecker', {when: Date.now() + 100, periodInMinutes: checkPeriod});
+    chrome.alarms.create('mangastreamchecker', {when: Date.now() + 100, periodInMinutes: checkPeriod()});
 }
 
 function showNotification(title, message, url) {
@@ -83,17 +79,16 @@ function init() {
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         switch (request.type) {
             case 'selectedManga':
-                selectedManga = request.newVal;
                 getData();
                 break;
             case 'checkPeriod':
-                checkPeriod = parseInt(request.newVal, 10);
                 setAlarm();
                 break;
         }
     });
     chrome.runtime.onInstalled.addListener(function () {
-        if (checkPeriod) setAlarm();
+        if (checkPeriod()) setAlarm();
+        else openOptions(); //open options page after installation, options will set checkPeriod
     });
     chrome.alarms.onAlarm.addListener(function (alarm) {
         getData();

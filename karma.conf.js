@@ -15,11 +15,11 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'src/options.js',
+            'test/options.spec.js',
             'test/mock_chrome.js',
             'src/background.js',
             'test/background.spec.js',
-            //'src/options.js',
-            //'test/options.spec.js',
             'test/*.html',
             'test/*.xml'
         ],

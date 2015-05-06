@@ -4,7 +4,7 @@ describe("options module", function () {
         fixture.setBase('test');
         mangaDirectoryPageString = window.__html__['test/manga_directory.html'];
         mangaDirectoryPage = document.implementation.createHTMLDocument();
-        mangaDirectoryPage.innerHTML = mangaDirectoryPageString;
+        mangaDirectoryPage.documentElement.innerHTML = mangaDirectoryPageString;
     });
     beforeEach(function () {
         fixture.load('options.fixture.html');
