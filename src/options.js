@@ -88,3 +88,5 @@ function init() {
     initCheckPeriodOption();
     getMangaDirectory('http://mangastream.com/manga', createMangaList, showError);
 }
+//for unit testing init only if we're in extension context
+if(chrome.runtime !== undefined) init();

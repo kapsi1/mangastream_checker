@@ -3,9 +3,8 @@ describe("options module", function () {
     beforeAll(function () {
         fixture.setBase('test');
         mangaDirectoryPageString = window.__html__['test/manga_directory.html'];
-        var doctype = document.implementation.createDocumentType('html', '', '');
-        mangaDirectoryPage = document.implementation.createDocument('', 'html', doctype);
-        mangaDirectoryPage.documentElement.innerHTML = mangaDirectoryPageString;
+        mangaDirectoryPage = document.implementation.createHTMLDocument();
+        mangaDirectoryPage.innerHTML = mangaDirectoryPageString;
     });
     beforeEach(function () {
         fixture.load('options.fixture.html');

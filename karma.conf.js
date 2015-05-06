@@ -15,11 +15,13 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            //'src/object.js',
-            //'test/object.test.js'
-            'src/options.js',
-            'test/options.test.js',
-            'test/*.html'
+            'test/mock_chrome.js',
+            'src/background.js',
+            'test/background.spec.js',
+            //'src/options.js',
+            //'test/options.spec.js',
+            'test/*.html',
+            'test/*.xml'
         ],
 
 
@@ -31,6 +33,7 @@ module.exports = function (config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             '**/*.html': ['html2js'],
+            '**/*.xml': ['html2js'],
             '**/*.json': ['html2js']
         },
 
