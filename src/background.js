@@ -50,7 +50,7 @@ function processRssPage(page, selectedManga, seenChapters) {
         var item = items[i];
         var fullTitle = item.querySelector('title').textContent;
         var split = fullTitle.split(' ');
-        var chapterNumber = parseInt(split.pop());
+        var chapterNumber = split.pop();
         var mangaTitle = split.join(' ');
         if (selectedManga.indexOf(mangaTitle) === -1) continue;
         var chapterTitle = item.querySelector('description').textContent;
